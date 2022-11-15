@@ -160,4 +160,4 @@ current: {
 
 unbatchedUpdates 函数设置了一些上下文信息，让 React 知道这是初次渲染
 
-[updateContainer(children, fiberRoot, parentComponent, callback)](/react-reconciler.md)
+[updateContainer(children, fiberRoot, parentComponent, callback)](/React/react-reconciler.md)

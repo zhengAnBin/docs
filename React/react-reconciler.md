@@ -117,7 +117,7 @@ export function scheduleUpdateOnFiber(fiber: Fiber, lane: Lane, eventTime: numbe
 
 ReactDOM.render 方法渲染模式是同步的，这并没有发挥 Fiber 的优势（异步渲染），可以将 ReactDOM.render 调用方式替换为 ReactDOM.createRoot 让 React 发挥 Fiber 优势
 
-先顺着同步模式的调用栈去认识 React 的整个流程[（首次渲染的调用栈）](/react-dom-render.md)。
+先顺着同步模式的调用栈去认识 React 的整个流程[（首次渲染的调用栈）](/React/react-dom-render.md)。
 
 同步渲染：legacy 模式
 

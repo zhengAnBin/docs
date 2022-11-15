@@ -12,5 +12,3 @@
 React 团队将以上这些技术非常巧妙的整合到了 React 框架中
 
 源码阅读版本：有说明的都会在顶部说明版本号，没有的全部是 17.0.0
-
-[ReactDOM.render](/react-dom-render.md)

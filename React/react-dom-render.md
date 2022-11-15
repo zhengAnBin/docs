@@ -161,6 +161,6 @@ beginWork 和 completeUnitOfWork
 
 completeUnitOfWork 经过逻辑处理最终调用 completeWork 来处理处理核心工作
 
-beginWork: 被称之为 [render](/beginWork.md) 阶段
+beginWork: 被称之为 [render](/React/beginWork.md) 阶段
 
-completeWork: 被称之为 [commit](/completeWork.md) 阶段
+completeWork: 被称之为 [commit](/React/completeWork.md) 阶段
