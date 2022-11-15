@@ -1,3 +1,0 @@
----
-title: jsx-to-dom
----

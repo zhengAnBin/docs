@@ -1,6 +1,4 @@
----
-title: react-dom-render
----
+## 前言
 
 ### performSyncWorkOnRoot
 
@@ -35,40 +33,40 @@ function performSyncWorkOnRoot(root) {
 
 ```js
 function renderRootSync(root: FiberRoot, lanes: Lanes) {
-  // ...
+    // ...
 
-  // If the root or lanes have changed, throw out the existing stack
-  // and prepare a fresh one. Otherwise we'll continue where we left off.
-  if (workInProgressRoot !== root || workInProgressRootRenderLanes !== lanes) {
-    prepareFreshStack(root, lanes);
-    startWorkOnPendingInteractions(root, lanes);
-  }
-
-  // ...
-
-  do {
-    try {
-      workLoopSync();
-      break;
-    } catch (thrownValue) {
-      handleError(root, thrownValue);
+    // If the root or lanes have changed, throw out the existing stack
+    // and prepare a fresh one. Otherwise we'll continue where we left off.
+    if (workInProgressRoot !== root || workInProgressRootRenderLanes !== lanes) {
+        prepareFreshStack(root, lanes);
+        startWorkOnPendingInteractions(root, lanes);
     }
-  } while (true);
-  resetContextDependencies();
-  if (enableSchedulerTracing) {
-    popInteractions(((prevInteractions: any): Set<Interaction>));
-  }
 
-  executionContext = prevExecutionContext;
-  popDispatcher(prevDispatcher);
+    // ...
 
-  // ...
+    do {
+        try {
+            workLoopSync();
+            break;
+        } catch (thrownValue) {
+            handleError(root, thrownValue);
+        }
+    } while (true);
+    resetContextDependencies();
+    if (enableSchedulerTracing) {
+        popInteractions(((prevInteractions: any): Set<Interaction>));
+    }
 
-  // Set this to null to indicate there's no in-progress render.
-  workInProgressRoot = null;
-  workInProgressRootRenderLanes = NoLanes;
+    executionContext = prevExecutionContext;
+    popDispatcher(prevDispatcher);
 
-  return workInProgressRootExitStatus;
+    // ...
+
+    // Set this to null to indicate there's no in-progress render.
+    workInProgressRoot = null;
+    workInProgressRootRenderLanes = NoLanes;
+
+    return workInProgressRootExitStatus;
 }
 
 // prepareFreshStack 省略不展开
@@ -82,30 +80,25 @@ function renderRootSync(root: FiberRoot, lanes: Lanes) {
 ```jsx
 // ReactFiber.old.js
 function createWorkInProgress(current: Fiber, pendingProps: any): Fiber {
-  let workInProgress = current.alternate;
-  if (workInProgress === null) {
-    // We use a double buffering pooling technique because we know that we'll
-    // only ever need at most two versions of a tree. We pool the "other" unused
-    // node that we're free to reuse. This is lazily created to avoid allocating
-    // extra objects for things that are never updated. It also allow us to
-    // reclaim the extra memory if needed.
-    workInProgress = createFiber(
-      current.tag,
-      pendingProps,
-      current.key,
-      current.mode
-    );
+    let workInProgress = current.alternate;
+    if (workInProgress === null) {
+        // We use a double buffering pooling technique because we know that we'll
+        // only ever need at most two versions of a tree. We pool the "other" unused
+        // node that we're free to reuse. This is lazily created to avoid allocating
+        // extra objects for things that are never updated. It also allow us to
+        // reclaim the extra memory if needed.
+        workInProgress = createFiber(current.tag, pendingProps, current.key, current.mode);
+
+        // ...
+        // 这里省略的代码还是在把 current 上的一些信息，挂到 workInProgress 上
+    } else {
+        // ...
+    }
 
     // ...
-    // 这里省略的代码还是在把 current 上的一些信息，挂到 workInProgress 上
-  } else {
-    // ...
-  }
+    // 又将 current 上的信息，挂到 workInProgress 上
 
-  // ...
-  // 又将 current 上的信息，挂到 workInProgress 上
-
-  return workInProgress;
+    return workInProgress;
 }
 
 // 创建了一颗名为 workInProgress 的 Fiber 树，而且这颗树是根据 current 创建的。
@@ -120,10 +113,10 @@ function createWorkInProgress(current: Fiber, pendingProps: any): Fiber {
 
 ```jsx
 function workLoopSync() {
-  // Already timed out, so perform work without checking if we need to yield.
-  while (workInProgress !== null) {
-    performUnitOfWork(workInProgress);
-  }
+    // Already timed out, so perform work without checking if we need to yield.
+    while (workInProgress !== null) {
+        performUnitOfWork(workInProgress);
+    }
 }
 
 // workLoopSync 出奇简单
@@ -134,31 +127,31 @@ function workLoopSync() {
 
 ```jsx
 function performUnitOfWork(unitOfWork: Fiber): void {
-  // The current, flushed, state of this fiber is the alternate. Ideally
-  // nothing should rely on this, but relying on it here means that we don't
-  // need an additional field on the work in progress.
-  const current = unitOfWork.alternate;
-  setCurrentDebugFiberInDEV(unitOfWork);
+    // The current, flushed, state of this fiber is the alternate. Ideally
+    // nothing should rely on this, but relying on it here means that we don't
+    // need an additional field on the work in progress.
+    const current = unitOfWork.alternate;
+    setCurrentDebugFiberInDEV(unitOfWork);
 
-  let next;
-  if (enableProfilerTimer && (unitOfWork.mode & ProfileMode) !== NoMode) {
-    startProfilerTimer(unitOfWork);
-    next = beginWork(current, unitOfWork, subtreeRenderLanes);
-    stopProfilerTimerIfRunningAndRecordDelta(unitOfWork, true);
-  } else {
-    next = beginWork(current, unitOfWork, subtreeRenderLanes);
-  }
+    let next;
+    if (enableProfilerTimer && (unitOfWork.mode & ProfileMode) !== NoMode) {
+        startProfilerTimer(unitOfWork);
+        next = beginWork(current, unitOfWork, subtreeRenderLanes);
+        stopProfilerTimerIfRunningAndRecordDelta(unitOfWork, true);
+    } else {
+        next = beginWork(current, unitOfWork, subtreeRenderLanes);
+    }
 
-  resetCurrentDebugFiberInDEV();
-  unitOfWork.memoizedProps = unitOfWork.pendingProps;
-  if (next === null) {
-    // If this doesn't spawn new work, complete the current work.
-    completeUnitOfWork(unitOfWork);
-  } else {
-    workInProgress = next;
-  }
+    resetCurrentDebugFiberInDEV();
+    unitOfWork.memoizedProps = unitOfWork.pendingProps;
+    if (next === null) {
+        // If this doesn't spawn new work, complete the current work.
+        completeUnitOfWork(unitOfWork);
+    } else {
+        workInProgress = next;
+    }
 
-  ReactCurrentOwner.current = null;
+    ReactCurrentOwner.current = null;
 }
 ```
 
@@ -168,6 +161,6 @@ beginWork 和 completeUnitOfWork
 
 completeUnitOfWork 经过逻辑处理最终调用 completeWork 来处理处理核心工作
 
-beginWork: 被称之为 [render](/React/source/beginWork) 阶段
+beginWork: 被称之为 [render](/beginWork.md) 阶段
 
-completeWork: 被称之为 [commit](/React/source/completeWork) 阶段
+completeWork: 被称之为 [commit](/completeWork.md) 阶段
