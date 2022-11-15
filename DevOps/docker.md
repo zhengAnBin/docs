@@ -1,6 +1,6 @@
----
-title: Docker
----
+## 前言
+
+### docker
 
 `docker run`
 启动镜像
@@ -32,7 +32,7 @@ title: Docker
 `docker exec`
 进入容器内部
 
-## docker run
+### docker run
 
 docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
@@ -53,7 +53,7 @@ docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
 
 [🤏](https://www.cnblogs.com/yfalcon/p/9044246.html)
 
-## Dockerfile
+### Dockerfile
 
 ```Dockerfile
 # 设置镜像使用的基础镜像
@@ -90,12 +90,12 @@ COPY . .
 CMD npm run start:prod
 ```
 
-## docker-compose
+### docker-compose
 
-## 一些用法记录
+### 一些用法记录
 
-```docker
-// 进入容器内部
-// bash 和 sh 是两种不同 Linux Shell、有的容器两种都有，有的只有一种
-docker exec -it conatinerId [/bin/bash or /bin/sh]
-```
+#### 进入容器内部
+
+bash 和 sh 是两种不同 Linux Shell、有的容器两种都有，有的只有一种
+
+`docker exec -it conatinerId [/bin/bash or /bin/sh]`

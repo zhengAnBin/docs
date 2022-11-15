@@ -1,21 +1,13 @@
----
-title: pm2
----
+## 前言
 
-[官方文档](https://pm2.keymetrics.io/docs/usage/quick-start/)
-pm2 是一个守护进程管理器，可以让应用在后台运行，无缝重启应用，开机自启动，负载均衡。
-它可以非常轻松的启动一个 application
+pm2 是一个守护进程管理器，可以让应用在后台运行，无缝重启应用，开机自启动，负载均衡。它可以非常轻松的启动一个 application
 
-<Callout title="cmd">
+-   pm2 start app.js
+-   pm2 start app.py
+-   pm2 start shell.sh
+-   pm2 start binary-file
 
-- pm2 start app.js
-- pm2 start app.py
-- pm2 start shell.sh
-- pm2 start binary-file
-
-</Callout>
-
-## 常用的命令
+### 常用的命令
 
 `pm2 start`
 启动一个进程
@@ -44,7 +36,7 @@ pm2 是一个守护进程管理器，可以让应用在后台运行，无缝重�
 `pm2 flush`
 情况所有的日志文件
 
-## 常用的 CLI 参数
+### 常用的 CLI 参数
 
 `--name <name>`
 为进程起一个名字
@@ -67,7 +59,7 @@ pm2 是一个守护进程管理器，可以让应用在后台运行，无缝重�
 `-- arg arg`
 传递额外的参数给进程
 
-## 一些用法记录
+### 使用用例
 
 ```js
 // 指定python3来运行脚本
@@ -78,19 +70,22 @@ pm2 start npm -- run dev
 
 ```
 
-## pm2 配置
+### pm2 配置
 
-默认的配置文件路径
-$HOME/.pm2
+默认的配置文件路径 $HOME/.pm2
+
+### 链接
 
 [开机自启动](https://pm2.keymetrics.io/docs/usage/startup/)
+
 [多应用编排](https://pm2.keymetrics.io/docs/usage/application-declaration/)
+
 [负载均衡](https://pm2.keymetrics.io/docs/usage/cluster-mode/)
 
 [简单实用](https://blog.csdn.net/qq_32281471/article/details/91369344)
 
-## [源代码](https://github.com/Unitech/pm2)
-
-一个 nodejs CLI 工具
+[源代码](https://github.com/Unitech/pm2)
 
 [原理分析:简书](https://www.jianshu.com/p/ac843b516fda)
+
+[官方文档](https://pm2.keymetrics.io/docs/usage/quick-start/)

@@ -1,14 +1,12 @@
----
-title: ReactDOM
----
+## 前言
 
 ReactDOM 可以理解为是一个的渲染引擎，一个将虚拟 DOM 转换为真实 DOM 的渲染器
 
 ```jsx
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
-ReactDOM.render(<div>React App</div>, document.getElementById('root'), () => {
-  // 渲染成功 ...
+ReactDOM.render(<div>React App</div>, document.getElementById("root"), () => {
+    // 渲染成功 ...
 });
 
 // 这段代码将所有的虚拟DOM转换为真实DOM之后，挂载到id为root的DOM元素上
@@ -19,65 +17,59 @@ ReactDOM.render(<div>React App</div>, document.getElementById('root'), () => {
 
 ```jsx
 function render(element, container, callback) {
-  // ...
-  // 判断了container是不是一个DOM元素
-  // 如果不是DOM元素，抛出错误 "Target container is not a DOM element."
+    // ...
+    // 判断了container是不是一个DOM元素
+    // 如果不是DOM元素，抛出错误 "Target container is not a DOM element."
 
-  // 返回了legacyRenderSubtreeIntoContainer函数的调用
-  return legacyRenderSubtreeIntoContainer(
-    null,
-    element,
-    container,
-    false,
-    callback
-  );
+    // 返回了legacyRenderSubtreeIntoContainer函数的调用
+    return legacyRenderSubtreeIntoContainer(null, element, container, false, callback);
 }
 
 function legacyRenderSubtreeIntoContainer(
-  parentComponent,
-  children,
-  container,
-  forceHydrate: boolean,
-  callback: ?Function
+    parentComponent,
+    children,
+    container,
+    forceHydrate: boolean,
+    callback: ?Function
 ) {
-  let root: RootType = (container._reactRootContainer: any);
-  let fiberRoot;
-  // 在 container 元素上挂载 _reactRootContainer 可以区分在当前 container 上这是不是第一次渲染虚拟 DOM
-  // 第一次需要构造 fiberRoot 对象。所以调用了 legacyCreateRootFromDOMContainer
-  if (!root) {
-    // Initial mount
-    root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
-      container,
-      forceHydrate
-    );
-    fiberRoot = root._internalRoot;
-    if (typeof callback === 'function') {
-      const originalCallback = callback;
-      callback = function () {
-        const instance = getPublicRootInstance(fiberRoot);
-        originalCallback.call(instance);
-      };
+    let root: RootType = (container._reactRootContainer: any);
+    let fiberRoot;
+    // 在 container 元素上挂载 _reactRootContainer 可以区分在当前 container 上这是不是第一次渲染虚拟 DOM
+    // 第一次需要构造 fiberRoot 对象。所以调用了 legacyCreateRootFromDOMContainer
+    if (!root) {
+        // Initial mount
+        root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
+            container,
+            forceHydrate
+        );
+        fiberRoot = root._internalRoot;
+        if (typeof callback === "function") {
+            const originalCallback = callback;
+            callback = function () {
+                const instance = getPublicRootInstance(fiberRoot);
+                originalCallback.call(instance);
+            };
+        }
+        // Initial mount should not be batched.
+        unbatchedUpdates(() => {
+            updateContainer(children, fiberRoot, parentComponent, callback);
+        });
+    } else {
+        fiberRoot = root._internalRoot;
+        if (typeof callback === "function") {
+            const originalCallback = callback;
+            callback = function () {
+                const instance = getPublicRootInstance(fiberRoot);
+                originalCallback.call(instance);
+            };
+        }
+        // Update
+        updateContainer(children, fiberRoot, parentComponent, callback);
     }
-    // Initial mount should not be batched.
-    unbatchedUpdates(() => {
-      updateContainer(children, fiberRoot, parentComponent, callback);
-    });
-  } else {
-    fiberRoot = root._internalRoot;
-    if (typeof callback === 'function') {
-      const originalCallback = callback;
-      callback = function () {
-        const instance = getPublicRootInstance(fiberRoot);
-        originalCallback.call(instance);
-      };
-    }
-    // Update
-    updateContainer(children, fiberRoot, parentComponent, callback);
-  }
-  // 上面的代码最终都调用 updateContainer 函数
+    // 上面的代码最终都调用 updateContainer 函数
 
-  // 返回 fiberRoot 对象
-  return getPublicRootInstance(fiberRoot);
+    // 返回 fiberRoot 对象
+    return getPublicRootInstance(fiberRoot);
 }
 
 // 又分别调用了三个函数的调用
@@ -168,4 +160,4 @@ current: {
 
 unbatchedUpdates 函数设置了一些上下文信息，让 React 知道这是初次渲染
 
-[updateContainer(children, fiberRoot, parentComponent, callback)](/React/source/react-reconciler)
+[updateContainer(children, fiberRoot, parentComponent, callback)](/react-reconciler)
