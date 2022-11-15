@@ -1,9 +1,3 @@
----
-id: home
-title: Study Record Docs
-permalink: index.html
----
-
 # Study Record Docs
 
 文档搜索 [DocsSearch](https://docsearch.algolia.com/)
